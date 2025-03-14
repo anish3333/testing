@@ -1,20 +1,23 @@
-# Use an official Node.js runtime as a parent image
+# Use Node.js as base
 FROM node:18
 
-# Set the working directory inside the container
+# Install k6
+RUN apt-get update && apt-get install -y curl && \
+    curl -s https://packagecloud.io/install/repositories/loadimpact/k6/script.deb.sh | bash && \
+    apt-get install -y k6
+
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json before running npm install
-COPY package*.json ./
-
-# Install dependencies
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy the rest of the application files
+# Copy the rest of the application
 COPY . .
 
-# Expose the port the server runs on
+# Expose the API port
 EXPOSE 3000
 
-# Command to run the application
+# Start the server
 CMD ["node", "server.js"]
