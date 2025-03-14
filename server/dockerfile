@@ -1,10 +1,11 @@
 # Use Node.js as base
 FROM node:18
 
-# Install k6
-RUN apt-get update && apt-get install -y curl && \
-    curl -s https://packagecloud.io/install/repositories/loadimpact/k6/script.deb.sh | bash && \
-    apt-get install -y k6
+# Install dependencies including k6
+RUN apt-get update && apt-get install -y curl gnupg && \
+    curl -s https://dl.k6.io/key.gpg | apt-key add - && \
+    echo "deb https://dl.k6.io/deb stable main" | tee /etc/apt/sources.list.d/k6.list && \
+    apt-get update && apt-get install -y k6
 
 # Set the working directory
 WORKDIR /app
@@ -15,6 +16,10 @@ RUN npm install
 
 # Copy the rest of the application
 COPY . .
+
+# Copy load test scripts to container
+RUN mkdir -p /app/load-test
+COPY load-test /app/load-test
 
 # Expose the API port
 EXPOSE 3000
