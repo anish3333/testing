@@ -1,7 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userController = require('../controllers/userController');
+const userController = require("../controllers/userController");
 
-router.get('/:id', userController.getUser);
+// ✅ Existing GET route
+router.get("/:id", userController.getUser);
+
+// ✅ New POST route (accepts request body)
+router.post("/", userController.createUser);
 
 module.exports = router;
