@@ -17,10 +17,6 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
-# Copy load test scripts to container
-RUN mkdir -p /app/load-test
-COPY load-test /app/load-test
-
 # Expose the API port
 EXPOSE 3000
 
